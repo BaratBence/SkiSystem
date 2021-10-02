@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SkiApp</string>
+    <string name="login">login</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_password">Enter password</string>
+    <string name="skiapp">SkiApp</string>
+    <string name="home">home</string>
+    <string name="account">account</string>
+    <string name="elevators">elevators</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello">hello</string>
+    <string name="manage_elevators">Manage elevators</string>
+    <string name="view_usage_of_each_elevator_and_manage_their_state">View usage of each elevator and manage their state</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="save">save</string>
+</resources>

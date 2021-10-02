@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+        <variable
+            name="user"
+            type="com.e.skiapp.model.User" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Contoller.fragments.Main_menu.AccountFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".Contoller.UserDetailsActivity">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textViewUsernameEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/enter_username"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/editTextUserNameEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewUsernameEdit"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="textEmailAddress"
+                    android:text="@{user.username}"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textViewPasswordEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editTextUserNameEdit"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/current_password"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/editTextPasswordEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewPasswordEdit"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="textPassword"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/textViewPasswordAgainEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editTextPasswordEdit"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/new_password"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/editTextPasswordAgainEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewPasswordAgainEdit"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="textPassword"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editTextPasswordAgainEdit"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:backgroundTint="@color/blue"
+                    android:text="@string/save" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </FrameLayout>
+</layout>
