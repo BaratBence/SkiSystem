@@ -1,5 +1,7 @@
 package com.itsupport.skibackend.elevatorapp;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -56,7 +58,7 @@ public class ElevatorApplication {
         this.utilization = utilization;
     }
 
-    public void update(ElevatorApplication elevatorApplication){
+    public void update(@NotNull ElevatorApplication elevatorApplication){
         this.seatsNum = elevatorApplication.getSeatsNum();
         this.name = elevatorApplication.getName();
     }
