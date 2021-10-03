@@ -55,4 +55,9 @@ public class ElevatorApplication {
     public void setUtilization(float utilization) {
         this.utilization = utilization;
     }
+
+    public void update(ElevatorApplication elevatorApplication){
+        this.seatsNum = elevatorApplication.getSeatsNum();
+        this.name = elevatorApplication.getName();
+    }
 }
