@@ -3,29 +3,21 @@ package com.itsupport.elevator.elevator;
 import org.jetbrains.annotations.NotNull;
 
 public class Elevator {
-    private String id;
-    private int numSeats;
+    private final String id;
+    private int seatsNum;
     private boolean isOnline = false;
 
-    Elevator(String id, int numSeats) {
+    Elevator(String id, int seatsNum) {
         this.id = id;
-        this.numSeats = numSeats;
+        this.seatsNum = seatsNum;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public int getNumSeats() {
-        return numSeats;
-    }
-
-    public void setNumSeats(int numSeats) {
-        this.numSeats = numSeats;
+    public int getSeatsNum() {
+        return seatsNum;
     }
 
     public boolean isOnline() {
@@ -37,7 +29,6 @@ public class Elevator {
     }
 
     public void updateElevator(@NotNull Elevator elevator) {
-        this.id = elevator.id;
-        this.numSeats = elevator.numSeats;
+        this.seatsNum = elevator.seatsNum;
     }
 }

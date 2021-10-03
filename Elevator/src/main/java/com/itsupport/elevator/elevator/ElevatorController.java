@@ -20,7 +20,7 @@ public class ElevatorController {
         if(this.elevator != null){
             return ResponseEntity.badRequest().build();
         }else{
-            this.elevator = new Elevator(elevator.getId(), elevator.getNumSeats());
+            this.elevator = new Elevator(elevator.getId(), elevator.getSeatsNum());
             return  ResponseEntity.created(URI.create("/get")).body(this.elevator);
         }
     }
