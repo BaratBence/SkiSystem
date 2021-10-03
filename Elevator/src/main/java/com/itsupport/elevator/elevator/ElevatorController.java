@@ -28,7 +28,7 @@ public class ElevatorController {
     @PutMapping("/update")
     ResponseEntity<Elevator> updateElevator(@RequestBody Elevator elevator){
         if(this.elevator != null){
-            updateElevatorProperties(elevator);
+            this.elevator.updateElevator(elevator);
             return  ResponseEntity.ok(this.elevator);
         }else{
             return ResponseEntity.badRequest().build();
@@ -63,10 +63,5 @@ public class ElevatorController {
         }else{
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    private void updateElevatorProperties(Elevator elevator){
-        this.elevator.setId(elevator.getId());
-        this.elevator.setNumSeats(elevator.getNumSeats());
     }
 }

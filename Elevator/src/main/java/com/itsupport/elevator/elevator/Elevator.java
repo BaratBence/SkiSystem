@@ -1,5 +1,7 @@
 package com.itsupport.elevator.elevator;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Elevator {
     private String id;
     private int numSeats;
@@ -32,5 +34,10 @@ public class Elevator {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public void updateElevator(@NotNull Elevator elevator) {
+        this.id = elevator.id;
+        this.numSeats = elevator.numSeats;
     }
 }
