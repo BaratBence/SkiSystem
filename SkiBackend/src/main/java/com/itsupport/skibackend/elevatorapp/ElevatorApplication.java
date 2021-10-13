@@ -1,10 +1,11 @@
 package com.itsupport.skibackend.elevatorapp;
 
+import com.itsupport.elevator.elevator.Elevator;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;;
@@ -20,7 +21,7 @@ public class ElevatorApplication {
     private String name;
     private boolean isOnline;
     private float utilization;
-    private UriComponents address;
+    private String address;
 
     public UUID getId() {
         return Id;
@@ -62,12 +63,12 @@ public class ElevatorApplication {
         this.utilization = utilization;
     }
 
-    public UriComponents getAddress() {
+    public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
-        this.address = UriComponentsBuilder.fromUriString(address).build();
+        this.address = address;
     }
 
     public void update(@NotNull ElevatorApplication elevatorApplication){
