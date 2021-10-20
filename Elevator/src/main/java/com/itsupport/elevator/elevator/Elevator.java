@@ -4,6 +4,13 @@ public class Elevator {
     private boolean isOnline = false;
     private float utilization = 0.0f;
 
+    Elevator(){}
+
+    Elevator(boolean isOnline, float utilization){
+        this.isOnline = isOnline;
+        this.utilization = utilization;
+    }
+
     public boolean isOnline() {
         return isOnline;
     }

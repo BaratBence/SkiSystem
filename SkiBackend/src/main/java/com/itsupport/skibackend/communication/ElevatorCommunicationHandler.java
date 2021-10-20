@@ -1,9 +1,8 @@
-package com.itsupport.skibackend.network;
+package com.itsupport.skibackend.communication;
 
 import com.itsupport.elevator.elevator.Elevator;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -13,14 +12,14 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Duration;
-import java.util.List;
+
 
 @Service
-public class ElevatorConnectionHandler {
+public class ElevatorCommunicationHandler {
 
     private final RestTemplate restTemplate;
 
-    public ElevatorConnectionHandler(RestTemplateBuilder restTemplateBuilder){
+    public ElevatorCommunicationHandler(RestTemplateBuilder restTemplateBuilder){
         this.restTemplate = restTemplateBuilder
                 .setConnectTimeout(Duration.ofSeconds(10))
                 .setReadTimeout(Duration.ofSeconds(10))
@@ -46,7 +45,7 @@ public class ElevatorConnectionHandler {
     }
 
     public Elevator getElevatorStatus(String address){
-        UriComponents url = UriComponentsBuilder.fromUriString(address).path("status").build();
+        UriComponents url = UriComponentsBuilder.newInstance().scheme("http").host(address).path("api/status").build();
         try {
             return this.restTemplate.getForObject(url.toString(), Elevator.class);
         }catch (HttpStatusCodeException ex){
@@ -64,7 +63,7 @@ public class ElevatorConnectionHandler {
     }
 
     public Elevator turnOffElevator(String address){
-        UriComponents url = UriComponentsBuilder.fromUriString(address).path("/turnOff").build();
+        UriComponents url = UriComponentsBuilder.newInstance().scheme("http").host(address).path("api/turnOff").build();
         try {
             return this.restTemplate.exchange(url.toString(), HttpMethod.PUT, null, Elevator.class).getBody();
         }catch (HttpStatusCodeException ex){
@@ -82,7 +81,7 @@ public class ElevatorConnectionHandler {
     }
 
     public Elevator turnOnElevator(String address){
-        UriComponents url = UriComponentsBuilder.fromUriString(address).path("/turnOn").build();
+        UriComponents url = UriComponentsBuilder.newInstance().scheme("http").host(address).path("api/turnOn").build();
         try {
             return this.restTemplate.exchange(url.toString(), HttpMethod.PUT, null, Elevator.class).getBody();
         }catch (HttpStatusCodeException ex){

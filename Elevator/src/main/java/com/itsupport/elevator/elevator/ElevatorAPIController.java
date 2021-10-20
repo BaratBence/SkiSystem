@@ -25,7 +25,7 @@ public class ElevatorAPIController {
         }
         else {
             elevatorHandler.registerElevator();
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(elevatorHandler.getElevatorStatus().get());
         }
     }
 
@@ -33,7 +33,7 @@ public class ElevatorAPIController {
     ResponseEntity<Elevator> turnOffElevator() {
         if (elevatorHandler.getElevatorStatus().isPresent() && elevatorHandler.getElevatorStatus().get().isOnline()){
             elevatorHandler.turnOffElevator();
-            return  ResponseEntity.ok().build();
+            return  ResponseEntity.ok(elevatorHandler.getElevatorStatus().get());
         }
         else {
             return ResponseEntity.badRequest().build();
@@ -44,7 +44,7 @@ public class ElevatorAPIController {
     ResponseEntity<Elevator> turnOnElevator() {
         if (elevatorHandler.getElevatorStatus().isPresent() && !elevatorHandler.getElevatorStatus().get().isOnline()){
             elevatorHandler.turnOnElevator();
-            return  ResponseEntity.ok().build();
+            return  ResponseEntity.ok(elevatorHandler.getElevatorStatus().get());
         }
         else {
             return ResponseEntity.badRequest().build();

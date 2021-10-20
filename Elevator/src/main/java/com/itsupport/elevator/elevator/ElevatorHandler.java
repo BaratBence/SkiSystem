@@ -39,7 +39,6 @@ public class ElevatorHandler {
     public void simulateUtilization(){
         if(this.elevator != null && this.elevator.isOnline()) {
             this.elevator.setUtilization(new Random().nextFloat());
-            System.out.println("TIME" + this.elevator.getUtilization());
         }
     }
 }
