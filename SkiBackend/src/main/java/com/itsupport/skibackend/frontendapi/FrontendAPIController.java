@@ -1,8 +1,8 @@
 package com.itsupport.skibackend.frontendapi;
 
 import com.itsupport.elevator.elevator.Elevator;
-import com.itsupport.skibackend.elevatorapp.ElevatorApplication;
-import com.itsupport.skibackend.elevatorapp.persistence.*;
+import com.itsupport.skibackend.models.ElevatorApplication;
+import com.itsupport.skibackend.models.persistence.*;
 
 import com.itsupport.skibackend.communication.ElevatorCommunicationHandler;
 import org.jetbrains.annotations.NotNull;
