@@ -14,13 +14,13 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/elevators")
-public class FrontendAPIController {
+public class ElevatorController {
 
     private final ElevatorAppRepository elevatorAppRepository;
     private final ElevatorCommunicationHandler elevatorConnectionHandler;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    FrontendAPIController(ElevatorAppRepository elevatorAppRepository, ElevatorCommunicationHandler elevatorConnectionHandler){
+    ElevatorController(ElevatorAppRepository elevatorAppRepository, ElevatorCommunicationHandler elevatorConnectionHandler){
         this.elevatorAppRepository = elevatorAppRepository;
         this.elevatorConnectionHandler = elevatorConnectionHandler;
     }
