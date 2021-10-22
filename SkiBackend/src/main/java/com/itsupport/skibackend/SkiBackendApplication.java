@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories(basePackageClasses = ElevatorAppRepository.class)
-@SpringBootApplication(exclude={SecurityAutoConfiguration.class})
+@SpringBootApplication//(exclude={SecurityAutoConfiguration.class})
 public class SkiBackendApplication {
 
     public static void main(String[] args) {
