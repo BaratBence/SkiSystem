@@ -7,6 +7,7 @@ import com.itsupport.skibackend.models.persistence.*;
 import com.itsupport.skibackend.communication.ElevatorCommunicationHandler;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -56,6 +57,7 @@ public class ElevatorController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<ElevatorApplication> addElevatorApplication(@RequestBody @NotNull ElevatorApplication newElevatorApplication) {
         Elevator newElevator = elevatorConnectionHandler.registerNewElevator(newElevatorApplication.getAddress());
         newElevatorApplication.setOnline(newElevator.isOnline());
@@ -65,6 +67,7 @@ public class ElevatorController {
     }
 
     @PutMapping("/{id}/update")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<ElevatorApplication> updateElevatorApplication(@PathVariable UUID id, @RequestBody ElevatorApplication newElevatorApplication) {
         Optional<ElevatorApplication> foundElevatorApplication = elevatorAppRepository.findById(id);
         if(foundElevatorApplication.isPresent()){

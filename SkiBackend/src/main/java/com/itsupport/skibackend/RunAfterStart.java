@@ -1,6 +1,5 @@
 package com.itsupport.skibackend;
 
-import com.itsupport.skibackend.models.EUserRole;
 import com.itsupport.skibackend.models.User;
 import com.itsupport.skibackend.models.UserRole;
 import com.itsupport.skibackend.models.persistence.UserRepository;
