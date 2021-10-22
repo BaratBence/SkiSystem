@@ -1,10 +1,6 @@
-package com.itsupport.skibackend.elevatorapp;
-
-import com.itsupport.elevator.elevator.Elevator;
+package com.itsupport.skibackend.models;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

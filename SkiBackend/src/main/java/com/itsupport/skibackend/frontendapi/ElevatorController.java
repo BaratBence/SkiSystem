@@ -1,12 +1,13 @@
 package com.itsupport.skibackend.frontendapi;
 
 import com.itsupport.elevator.elevator.Elevator;
-import com.itsupport.skibackend.elevatorapp.ElevatorApplication;
-import com.itsupport.skibackend.elevatorapp.persistence.*;
+import com.itsupport.skibackend.models.ElevatorApplication;
+import com.itsupport.skibackend.models.persistence.*;
 
 import com.itsupport.skibackend.communication.ElevatorCommunicationHandler;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -14,13 +15,13 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/elevators")
-public class FrontendAPIController {
+public class ElevatorController {
 
     private final ElevatorAppRepository elevatorAppRepository;
     private final ElevatorCommunicationHandler elevatorConnectionHandler;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    FrontendAPIController(ElevatorAppRepository elevatorAppRepository, ElevatorCommunicationHandler elevatorConnectionHandler){
+    ElevatorController(ElevatorAppRepository elevatorAppRepository, ElevatorCommunicationHandler elevatorConnectionHandler){
         this.elevatorAppRepository = elevatorAppRepository;
         this.elevatorConnectionHandler = elevatorConnectionHandler;
     }
@@ -56,6 +57,7 @@ public class FrontendAPIController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<ElevatorApplication> addElevatorApplication(@RequestBody @NotNull ElevatorApplication newElevatorApplication) {
         Elevator newElevator = elevatorConnectionHandler.registerNewElevator(newElevatorApplication.getAddress());
         newElevatorApplication.setOnline(newElevator.isOnline());
@@ -65,6 +67,7 @@ public class FrontendAPIController {
     }
 
     @PutMapping("/{id}/update")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<ElevatorApplication> updateElevatorApplication(@PathVariable UUID id, @RequestBody ElevatorApplication newElevatorApplication) {
         Optional<ElevatorApplication> foundElevatorApplication = elevatorAppRepository.findById(id);
         if(foundElevatorApplication.isPresent()){
