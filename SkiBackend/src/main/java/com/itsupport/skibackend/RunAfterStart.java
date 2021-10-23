@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.itsupport.skibackend.models.EUserRole.ROLE_ADMINISTRATOR;
+import static com.itsupport.skibackend.models.EUserRole.ROLE_USER;
 
 @Component
 public class RunAfterStart {
@@ -30,6 +31,7 @@ public class RunAfterStart {
     @EventListener(ApplicationReadyEvent.class)
     public void createDefaultUser() {
         roleRepository.save(new UserRole(ROLE_ADMINISTRATOR));
+        roleRepository.save(new UserRole(ROLE_USER));
         Set<UserRole> roles = new HashSet<>();
         roles.add(roleRepository.findByName(ROLE_ADMINISTRATOR).get());
 
