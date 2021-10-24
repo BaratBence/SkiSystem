@@ -68,58 +68,7 @@ public class AuthController {
                 userDetails.getUsername(),
                 roles));
     }
-
-    /*
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<UserRole> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            UserRole userRole = roleRepository.findByName(EUserRole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        UserRole adminRole = roleRepository.findByName(EUserRole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "mod":
-                        UserRole modRole = roleRepository.findByName(EUserRole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-                    default:
-                        UserRole userRole = roleRepository.findByName(EUserRole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
-
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }
-    */
-
+    
     @PutMapping
     @RequestMapping(value = "/{id}/update")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -127,7 +76,7 @@ public class AuthController {
         Optional<User> user = userRepository.findById(id);
         Optional<User> existingUser = userRepository.findByUsername(userNew.getUsername());
         if(user.isPresent()) {
-            if((existingUser.isPresent() && existingUser.get().getUsername().equals(userNew.getUsername())) || (existingUser.isEmpty()))
+            if((existingUser.isPresent() && existingUser.get().getId().equals(id)) || (existingUser.isEmpty()))
             {
                 user.get().setUsername(userNew.getUsername());
                 user.get().setPassword(encoder.encode(userNew.getPassword()));
@@ -142,39 +91,37 @@ public class AuthController {
     @RequestMapping(value = "/update")
     @PreAuthorize("hasRole('ADMINISTRATOR') || hasRole('ROLE_USER')")
     public ResponseEntity<JwtResponse> updateUser(@Valid @RequestBody @NotNull User userNew) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> existingUser = userRepository.findByUsername(userNew.getUsername());
-        //TODO: SHOULD BE IN TO DIFFERENT BRACNHES (TOKEN IS REQUIRED)
-        if((existingUser.isPresent() && existingUser.get().getUsername().equals(userNew.getUsername())) || (existingUser.isEmpty())) {
-            UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(existingUser.isPresent() &&  existingUser.get().getId().equals(userDetails.getId())) {
+            Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
+            user.get().setPassword(encoder.encode(userNew.getPassword()));
+            userRepository.save(user.get());
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(new JwtResponse("", user.get().getId(), user.get().getUsername(), roles));
+        }
+        else if(existingUser.isEmpty()) {
             Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
             user.get().setUsername(userNew.getUsername());
             user.get().setPassword(encoder.encode(userNew.getPassword()));
-            User updatedUser = userRepository.save(user.get());
-            //TODO: previous token add to blacklist
-            //TODO: ERROR updatedUser's password does not match
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(updatedUser.getUsername(), updatedUser.getPassword()));
+            userRepository.save(user.get());
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.get().getUsername(), userNew.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateJwtToken(authentication);
-
-            List<String> roles = UserDetailsImpl.build(updatedUser).getAuthorities().stream()
+            List<String> roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
-            return ResponseEntity.ok(new JwtResponse(jwt, updatedUser.getId(), updatedUser.getUsername(), roles));
+            return ResponseEntity.ok(new JwtResponse(jwt, user.get().getId(), user.get().getUsername(), roles));
         }
         else return ResponseEntity.badRequest().build();
-    }
-
-    @PutMapping
-    @RequestMapping(value = "/{id}/logoff")
-    @PreAuthorize("hasRole('ADMINISTRATOR') || hasRole('USER')")
-    public void logOff(@PathVariable UUID id) {
-        //TODO: add to blackList
     }
 
     @PostMapping
     @RequestMapping(value = "/addUser")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<User> createUserByAdmin(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<User> createUserByAdmin(@Valid @NotNull @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) return ResponseEntity.badRequest().build();
 
         User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));

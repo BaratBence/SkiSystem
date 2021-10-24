@@ -6,10 +6,11 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.e.skiapp.R
 import com.e.skiapp.databinding.ActivityLoginBinding
+import com.e.skiapp.network.RetrofitClient
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    //private val retrofit: RetrofitClient = RetrofitClient()
+    private val retrofit: RetrofitClient = RetrofitClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
@@ -18,8 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.loginbutton.setOnClickListener {
-            val intent = Intent(this, MainMenuActivity::class.java)
-            this.startActivity(intent)
+            retrofit.login(this,  binding.editTextPersonName.text.toString(), binding.editTextPersonName.text.toString())
         }
 
     }
