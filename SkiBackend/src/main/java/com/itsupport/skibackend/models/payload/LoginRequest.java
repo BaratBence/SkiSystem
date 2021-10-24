@@ -1,23 +1,13 @@
-package com.itsupport.skibackend.communication.payload;
+package com.itsupport.skibackend.models.payload;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
 
-public class SignUpRequest {
-
+public class LoginRequest {
     @NotBlank
     private String username;
+
     @NotBlank
     private String password;
-
-    private Set<String> roles;
-
-    public SignUpRequest(String username, String password, Set<String> roles) {
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-    }
-
 
     public String getUsername() {
         return username;
@@ -34,8 +24,5 @@ public class SignUpRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
 }
+

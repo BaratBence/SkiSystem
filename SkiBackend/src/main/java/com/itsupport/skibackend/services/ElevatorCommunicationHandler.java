@@ -1,4 +1,4 @@
-package com.itsupport.skibackend.communication;
+package com.itsupport.skibackend.services;
 
 import com.itsupport.elevator.elevator.Elevator;
 

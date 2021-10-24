@@ -1,10 +1,10 @@
 package com.itsupport.skibackend.frontendapi;
 
 import com.itsupport.elevator.elevator.Elevator;
-import com.itsupport.skibackend.models.ElevatorApplication;
+import com.itsupport.skibackend.models.ElevatorApplicationModel;
 import com.itsupport.skibackend.models.persistence.*;
 
-import com.itsupport.skibackend.communication.ElevatorCommunicationHandler;
+import com.itsupport.skibackend.services.ElevatorCommunicationHandler;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,15 +27,15 @@ public class ElevatorController {
     }
 
     @GetMapping()
-    ResponseEntity<List<ElevatorApplication>> getAllElevatorApplication(){
-        List<ElevatorApplication> foundElevatorApplications = elevatorAppRepository.findAll();
-        if(!foundElevatorApplications.isEmpty()){
-            for(ElevatorApplication elevatorApplication : foundElevatorApplications){
-                Elevator tmpElevator = elevatorConnectionHandler.getElevatorStatus(elevatorApplication.getAddress());
-                elevatorApplication.setOnline(tmpElevator.isOnline());
-                elevatorApplication.setUtilization(tmpElevator.getUtilization());
+    ResponseEntity<List<ElevatorApplicationModel>> getAllElevatorApplication(){
+        List<ElevatorApplicationModel> foundElevatorApplicationModels = elevatorAppRepository.findAll();
+        if(!foundElevatorApplicationModels.isEmpty()){
+            for(ElevatorApplicationModel elevatorApplicationModel : foundElevatorApplicationModels){
+                Elevator tmpElevator = elevatorConnectionHandler.getElevatorStatus(elevatorApplicationModel.getAddress());
+                elevatorApplicationModel.setOnline(tmpElevator.isOnline());
+                elevatorApplicationModel.setUtilization(tmpElevator.getUtilization());
             }
-            return ResponseEntity.ok(foundElevatorApplications);
+            return ResponseEntity.ok(foundElevatorApplicationModels);
         }
         else {
             return ResponseEntity.notFound().build();
@@ -43,8 +43,8 @@ public class ElevatorController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<ElevatorApplication> getElevatorApplicationById(@PathVariable UUID id){
-        Optional<ElevatorApplication> foundElevatorApplication = elevatorAppRepository.findById(id);
+    ResponseEntity<ElevatorApplicationModel> getElevatorApplicationById(@PathVariable UUID id){
+        Optional<ElevatorApplicationModel> foundElevatorApplication = elevatorAppRepository.findById(id);
         if (foundElevatorApplication.isPresent()){
             Elevator tmpElevator = elevatorConnectionHandler.getElevatorStatus(foundElevatorApplication.get().getAddress());
             foundElevatorApplication.get().setOnline(tmpElevator.isOnline());
@@ -58,20 +58,20 @@ public class ElevatorController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    ResponseEntity<ElevatorApplication> addElevatorApplication(@RequestBody @NotNull ElevatorApplication newElevatorApplication) {
-        Elevator newElevator = elevatorConnectionHandler.registerNewElevator(newElevatorApplication.getAddress());
-        newElevatorApplication.setOnline(newElevator.isOnline());
-        newElevatorApplication.setUtilization(newElevator.getUtilization());
-        UUID newElevatorApplicationId = elevatorAppRepository.save(newElevatorApplication).getId();
+    ResponseEntity<ElevatorApplicationModel> addElevatorApplication(@RequestBody @NotNull ElevatorApplicationModel newElevatorApplicationModel) {
+        Elevator newElevator = elevatorConnectionHandler.registerNewElevator(newElevatorApplicationModel.getAddress());
+        newElevatorApplicationModel.setOnline(newElevator.isOnline());
+        newElevatorApplicationModel.setUtilization(newElevator.getUtilization());
+        UUID newElevatorApplicationId = elevatorAppRepository.save(newElevatorApplicationModel).getId();
         return ResponseEntity.created(URI.create("" + newElevatorApplicationId)).build();
     }
 
     @PutMapping("/{id}/update")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    ResponseEntity<ElevatorApplication> updateElevatorApplication(@PathVariable UUID id, @RequestBody ElevatorApplication newElevatorApplication) {
-        Optional<ElevatorApplication> foundElevatorApplication = elevatorAppRepository.findById(id);
+    ResponseEntity<ElevatorApplicationModel> updateElevatorApplication(@PathVariable UUID id, @RequestBody ElevatorApplicationModel newElevatorApplicationModel) {
+        Optional<ElevatorApplicationModel> foundElevatorApplication = elevatorAppRepository.findById(id);
         if(foundElevatorApplication.isPresent()){
-            foundElevatorApplication.get().update(newElevatorApplication);
+            foundElevatorApplication.get().update(newElevatorApplicationModel);
             return ResponseEntity.ok(elevatorAppRepository.save(foundElevatorApplication.get()));
         }
         else {
@@ -80,8 +80,8 @@ public class ElevatorController {
     }
 
     @PutMapping("/{id}/turnOff")
-    ResponseEntity<ElevatorApplication> turnOffElevatorApplication(@PathVariable UUID id) {
-        Optional<ElevatorApplication> foundElevatorApplication = elevatorAppRepository.findById(id);
+    ResponseEntity<ElevatorApplicationModel> turnOffElevatorApplication(@PathVariable UUID id) {
+        Optional<ElevatorApplicationModel> foundElevatorApplication = elevatorAppRepository.findById(id);
         if(foundElevatorApplication.isPresent()){
             Elevator tmpElevator = elevatorConnectionHandler.turnOffElevator(foundElevatorApplication.get().getAddress());
             foundElevatorApplication.get().setOnline(tmpElevator.isOnline());
@@ -94,8 +94,8 @@ public class ElevatorController {
     }
 
     @PutMapping("/{id}/turnOn")
-    ResponseEntity<ElevatorApplication> turnOnElevatorApplication(@PathVariable UUID id) {
-        Optional<ElevatorApplication> foundElevatorApplication = elevatorAppRepository.findById(id);
+    ResponseEntity<ElevatorApplicationModel> turnOnElevatorApplication(@PathVariable UUID id) {
+        Optional<ElevatorApplicationModel> foundElevatorApplication = elevatorAppRepository.findById(id);
         if(foundElevatorApplication.isPresent()){
             Elevator tmpElevator = elevatorConnectionHandler.turnOnElevator(foundElevatorApplication.get().getAddress());
             foundElevatorApplication.get().setOnline(tmpElevator.isOnline());
