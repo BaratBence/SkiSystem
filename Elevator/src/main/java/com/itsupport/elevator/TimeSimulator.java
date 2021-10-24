@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimeSimulator {
     //To simulate the different utilization of the Elevator
-    @Scheduled(fixedDelay = 2000)
+    @Scheduled(fixedDelay = 10000)
     private void simulateTime(){
         ElevatorHandler.getInstance().simulateUtilization();
     }
