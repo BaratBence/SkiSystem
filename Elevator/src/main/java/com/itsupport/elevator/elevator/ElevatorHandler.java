@@ -1,7 +1,9 @@
 package com.itsupport.elevator.elevator;
 
+import com.itsupport.elevator.security.RestTemplateConfig;
 import com.itsupport.elevator.services.BackendCommunicationHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -15,14 +17,16 @@ public class ElevatorHandler {
     public static String BACKEND_ADDRESS = "";
     public static UUID ID = null;
     private Elevator elevator = null;
-    private static BackendCommunicationHandler backendCommunicationHandler;
+    @Autowired
+    private BackendCommunicationHandler backendCommunicationHandler;
 
-    private ElevatorHandler() {}
+    private ElevatorHandler() {
+        backendCommunicationHandler = new BackendCommunicationHandler(new RestTemplate());
+    }
 
     public static ElevatorHandler getInstance() {
         if(elevatorHandler == null){
             elevatorHandler = new ElevatorHandler();
-            backendCommunicationHandler = new BackendCommunicationHandler(new RestTemplate());
         }
         return elevatorHandler;
     }
@@ -31,8 +35,11 @@ public class ElevatorHandler {
         return Optional.ofNullable(elevator);
     }
 
-    public void registerElevator(){
+    public void registerElevator(UUID id, String address, float maxUtil){
         this.elevator = new Elevator();
+        ID = id;
+        BACKEND_ADDRESS = address;
+        MAX_ELEVATOR_UTILIZATION = maxUtil;
     }
 
     public void turnOffElevator(){

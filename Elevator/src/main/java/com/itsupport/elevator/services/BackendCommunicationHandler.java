@@ -2,10 +2,13 @@ package com.itsupport.elevator.services;
 
 import com.itsupport.elevator.elevator.Elevator;
 import com.itsupport.elevator.elevator.ElevatorHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -16,7 +19,8 @@ import java.util.Collections;
 
 public class BackendCommunicationHandler {
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    private  RestTemplate restTemplate;
 
     public BackendCommunicationHandler(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;

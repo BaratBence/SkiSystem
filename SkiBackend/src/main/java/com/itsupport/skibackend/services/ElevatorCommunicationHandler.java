@@ -27,7 +27,7 @@ public class ElevatorCommunicationHandler {
     }
 
     public Elevator registerNewElevator(String address){
-        UriComponents url = UriComponentsBuilder.newInstance().scheme("http").host(address).path("api/register").build();
+        UriComponents url = UriComponentsBuilder.newInstance().scheme("https").host(address).path("api/register").build();
         try {
             return this.restTemplate.exchange(url.toString(), HttpMethod.POST, null, Elevator.class).getBody();
         }catch (HttpStatusCodeException ex){
@@ -45,7 +45,7 @@ public class ElevatorCommunicationHandler {
     }
 
     public Elevator getElevatorStatus(String address){
-        UriComponents url = UriComponentsBuilder.newInstance().scheme("http").host(address).path("api/status").build();
+        UriComponents url = UriComponentsBuilder.newInstance().scheme("https").host(address).path("api/status").build();
         try {
             return this.restTemplate.getForObject(url.toString(), Elevator.class);
         }catch (HttpStatusCodeException ex){
@@ -63,7 +63,7 @@ public class ElevatorCommunicationHandler {
     }
 
     public Elevator turnOffElevator(String address){
-        UriComponents url = UriComponentsBuilder.newInstance().scheme("http").host(address).path("api/turnOff").build();
+        UriComponents url = UriComponentsBuilder.newInstance().scheme("https").host(address).path("api/turnOff").build();
         try {
             return this.restTemplate.exchange(url.toString(), HttpMethod.PUT, null, Elevator.class).getBody();
         }catch (HttpStatusCodeException ex){
@@ -81,7 +81,7 @@ public class ElevatorCommunicationHandler {
     }
 
     public Elevator turnOnElevator(String address){
-        UriComponents url = UriComponentsBuilder.newInstance().scheme("http").host(address).path("api/turnOn").build();
+        UriComponents url = UriComponentsBuilder.newInstance().scheme("https").host(address).path("api/turnOn").build();
         try {
             return this.restTemplate.exchange(url.toString(), HttpMethod.PUT, null, Elevator.class).getBody();
         }catch (HttpStatusCodeException ex){

@@ -4,6 +4,9 @@ package com.itsupport.elevator.elevator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api")
 public class ElevatorAPIController {
@@ -19,12 +22,18 @@ public class ElevatorAPIController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<Elevator> registerElevator(){
+    ResponseEntity<Elevator> registerElevator(@RequestBody Map<String, String>payload){
+        System.out.println(payload.get("ID"));
+        System.out.println(payload.get("IP"));
+        System.out.println(payload.get("MaxUtil"));
         if (elevatorHandler.getElevatorStatus().isPresent()){
             return ResponseEntity.badRequest().build();
         }
         else {
-            elevatorHandler.registerElevator();
+            elevatorHandler.registerElevator(
+                    UUID.fromString(payload.get("ID")),
+                    payload.get("Address"),
+                    Float.parseFloat(payload.get("MaxUtil")));
             return ResponseEntity.ok(elevatorHandler.getElevatorStatus().get());
         }
     }
