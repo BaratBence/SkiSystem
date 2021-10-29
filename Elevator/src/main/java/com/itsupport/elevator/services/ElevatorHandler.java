@@ -1,34 +1,57 @@
-package com.itsupport.elevator.elevator;
+package com.itsupport.elevator.services;
 
-import com.itsupport.elevator.security.RestTemplateConfig;
-import com.itsupport.elevator.services.BackendCommunicationHandler;
+import com.itsupport.elevator.models.Elevator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
+@Service
 public class ElevatorHandler {
 
-    private static ElevatorHandler elevatorHandler = null;
-    private static float MAX_ELEVATOR_UTILIZATION = 0.0f;
+    public static float MAX_ELEVATOR_UTILIZATION = 0.0f;
     public static String BACKEND_ADDRESS = "";
     public static UUID ID = null;
     private Elevator elevator = null;
     @Autowired
     private BackendCommunicationHandler backendCommunicationHandler;
 
-    private ElevatorHandler() {
-        backendCommunicationHandler = new BackendCommunicationHandler(new RestTemplate());
+    public float getMAX_ELEVATOR_UTILIZATION() {
+        return MAX_ELEVATOR_UTILIZATION;
     }
 
-    public static ElevatorHandler getInstance() {
-        if(elevatorHandler == null){
-            elevatorHandler = new ElevatorHandler();
-        }
-        return elevatorHandler;
+    public void setMAX_ELEVATOR_UTILIZATION(float MAX_ELEVATOR_UTILIZATION) {
+        this.MAX_ELEVATOR_UTILIZATION = MAX_ELEVATOR_UTILIZATION;
+    }
+
+    public String getBACKEND_ADDRESS() {
+        return BACKEND_ADDRESS;
+    }
+
+    public void setBACKEND_ADDRESS(String BACKEND_ADDRESS) {
+        this.BACKEND_ADDRESS = BACKEND_ADDRESS;
+    }
+
+    public UUID getID() {
+        return ID;
+    }
+
+    public void setID(UUID ID) {
+        this.ID = ID;
+    }
+
+    public Elevator getElevator() {
+        return elevator;
+    }
+
+    public void setElevator(Elevator elevator) {
+        this.elevator = elevator;
+    }
+
+    ElevatorHandler(BackendCommunicationHandler backendCommunicationHandler) {
+        this.backendCommunicationHandler = backendCommunicationHandler;
     }
 
     public Optional<Elevator> getElevatorStatus(){

@@ -1,6 +1,6 @@
 package com.itsupport.skibackend.models;
 
-import com.itsupport.elevator.elevator.Elevator;
+import com.itsupport.elevator.models.Elevator;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Entity;

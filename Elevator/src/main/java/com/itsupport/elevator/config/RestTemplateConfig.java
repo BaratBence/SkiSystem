@@ -1,4 +1,4 @@
-package com.itsupport.elevator.security;
+package com.itsupport.elevator.config;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;

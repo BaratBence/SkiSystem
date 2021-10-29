@@ -1,6 +1,6 @@
 package com.itsupport.skibackend.services;
 
-import com.itsupport.elevator.elevator.Elevator;
+import com.itsupport.elevator.models.Elevator;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;

@@ -1,7 +1,7 @@
 package com.itsupport.skibackend.services;
 
 
-import com.itsupport.elevator.elevator.Elevator;
+import com.itsupport.elevator.models.Elevator;
 import com.itsupport.skibackend.models.ElevatorApplicationModel;
 import com.itsupport.skibackend.models.persistence.ElevatorAppRepository;
 import org.jetbrains.annotations.NotNull;

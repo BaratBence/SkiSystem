@@ -1,6 +1,9 @@
-package com.itsupport.elevator.elevator;
+package com.itsupport.elevator.controllers;
 
 
+import com.itsupport.elevator.models.Elevator;
+import com.itsupport.elevator.services.ElevatorHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +13,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api")
 public class ElevatorAPIController {
-    private final ElevatorHandler elevatorHandler;
-
-    ElevatorAPIController() {
-        this.elevatorHandler = ElevatorHandler.getInstance();
-    }
+    @Autowired
+    private ElevatorHandler elevatorHandler;
 
     @GetMapping("/status")
     ResponseEntity<Elevator> getElevator(){

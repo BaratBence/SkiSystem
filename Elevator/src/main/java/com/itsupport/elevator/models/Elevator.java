@@ -1,10 +1,10 @@
-package com.itsupport.elevator.elevator;
+package com.itsupport.elevator.models;
 
 public class Elevator {
     private boolean isOnline = false;
     private float utilization = 0.0f;
 
-    Elevator(){}
+    public Elevator(){}
 
     Elevator(boolean isOnline, float utilization){
         this.isOnline = isOnline;

@@ -1,30 +1,29 @@
 package com.itsupport.elevator.services;
 
-import com.itsupport.elevator.elevator.Elevator;
-import com.itsupport.elevator.elevator.ElevatorHandler;
+import com.itsupport.elevator.models.Elevator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.Duration;
-import java.util.Collections;
-
+@Service
 public class BackendCommunicationHandler {
 
     @Autowired
     private  RestTemplate restTemplate;
 
-    public BackendCommunicationHandler(RestTemplate restTemplate) {
+    /*
+    @Autowired
+    private ElevatorHandler elevatorHandler;
+
+    BackendCommunicationHandler(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+     */
 
     public void notifyBackend(String backendAddress, Elevator elevator) {
         UriComponents url = UriComponentsBuilder.newInstance()
