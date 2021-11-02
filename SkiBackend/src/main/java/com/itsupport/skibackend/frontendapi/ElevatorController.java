@@ -59,11 +59,11 @@ public class ElevatorController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<ElevatorApplicationModel> addElevatorApplication(@RequestBody @NotNull ElevatorApplicationModel newElevatorApplicationModel) {
-        Elevator newElevator = elevatorConnectionHandler.registerNewElevator(newElevatorApplicationModel.getAddress());
-        newElevatorApplicationModel.setOnline(newElevator.isOnline());
-        newElevatorApplicationModel.setUtilization(newElevator.getUtilization());
-        UUID newElevatorApplicationId = elevatorAppRepository.save(newElevatorApplicationModel).getId();
-        return ResponseEntity.created(URI.create("" + newElevatorApplicationId)).build();
+        ElevatorApplicationModel newElevatorApplication = elevatorAppRepository.save(newElevatorApplicationModel);
+        newElevatorApplication.setOnline(false);
+        newElevatorApplication.setUtilization(0.0f);
+        Elevator newElevator = elevatorConnectionHandler.registerNewElevator(newElevatorApplication);
+        return ResponseEntity.created(URI.create("")).build();
     }
 
     @PutMapping("/{id}/update")

@@ -23,11 +23,12 @@ public class ElevatorCallbackController {
         this.elevatorCallbackHandler = elevatorCallbackHandler;
     }
 
-    @PutMapping("/{id}/exceptional")
+    @PutMapping("/{faultyElevatorAppID}/exceptional")
     ResponseEntity<?> exceptionalElevatorEvent(@PathVariable UUID faultyElevatorAppID,
                                                @RequestBody Elevator faultyElevator){
         Optional<ElevatorApplicationModel> faultyElevatorApplication = elevatorAppRepository.findById(faultyElevatorAppID);
         if (faultyElevatorApplication.isPresent()){
+            System.out.println("CallBack received!!");
             return elevatorCallbackHandler.handleExceptionalEvent(faultyElevatorAppID, faultyElevator);
         } else
         {
