@@ -10,6 +10,12 @@ class JwtResponse {
 
     private var username: String? = null
 
+    fun JwtResponse(id: UUID, username: String, token: String) {
+        this.id = id
+        this.token = token
+        this.username
+    }
+
     fun getToken(): String? {
         return token
     }
@@ -33,5 +39,6 @@ class JwtResponse {
     fun setUsername(username: String) {
         this.username = username
     }
+
 
 }

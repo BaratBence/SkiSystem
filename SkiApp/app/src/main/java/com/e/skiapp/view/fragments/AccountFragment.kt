@@ -1,20 +1,30 @@
 package com.e.skiapp.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
-import android.service.autofill.UserData
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.e.skiapp.R
 import com.e.skiapp.databinding.FragmentAccountBinding
+import com.e.skiapp.model.User
+import com.e.skiapp.model.UserData
+import com.e.skiapp.network.RetrofitClient
+import com.e.skiapp.network.response.JwtResponse
+import com.e.skiapp.network.services.UserService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 
 class AccountFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountBinding
-    //private val retrofit: RetrofitClient = RetrofitClient()
+    private var retrofit: Retrofit ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,18 +32,20 @@ class AccountFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_account,container,false)
-        //binding.user = UserData.createUser()
+        binding.user = UserData.createUser()
 
         binding.saveButton.setOnClickListener{
-            //if(checkInput())) return@setOnClickListener
-            //retrofit.updateUser(binding.root.context,changeUserRequest,"Bearer " + UserData.getToken())
+            val userName = binding.editTextUserNameEdit.text.toString()
+            val password= binding.editTextPasswordEdit.text.toString()
+            if(checkInput(userName,password)) return@setOnClickListener
+
         }
 
         return binding.root
     }
 
 
-    fun checkInput(username:String, password:String, passwordNew: String): Boolean {
+    fun checkInput(username:String, password:String): Boolean {
         var result = true
         if(username == "") {
             binding.editTextUserNameEdit.error = "Username must be not be empty"
@@ -44,12 +56,22 @@ class AccountFragment : Fragment() {
             binding.editTextPasswordEdit.error = "Password must not be empty"
             result = false
         }
-        if(passwordNew == "")
-        {
-            binding.editTextPasswordAgainEdit.error = "New Password must not be empty"
-            result = false
-        }
         return result
     }
 
+    fun update(userName: String, password: String) {
+        retrofit = RetrofitClient.getInstance(binding.root.context);
+        val call = retrofit!!.create(UserService::class.java).update(User(userName, password), "Bearer " + UserData.getToken())
+        call.enqueue(object : Callback<JwtResponse> {
+            override fun onResponse(call: Call<JwtResponse>, message: Response<JwtResponse>) {
+                if (message.code() == 200) {
+                    UserData.initialize(message.body()!!.getToken()!!, User(message.body()!!.getUsername()!!))
+                    Toast.makeText(binding.root.context, "Successful update", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<JwtResponse>, t: Throwable) {
+                Toast.makeText(binding.root.context, t.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }
