@@ -1,6 +1,7 @@
 package com.itsupport.skibackend.models;
 
 import com.itsupport.elevator.models.Elevator;
+import org.hibernate.annotations.Type;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ public class ElevatorApplicationModel {
 
     @Id
     @GeneratedValue
+    @Type(type="uuid-char")
     private UUID Id;
     private int seatsNum;
     private String name;

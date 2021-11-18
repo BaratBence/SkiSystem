@@ -38,7 +38,7 @@ public class ElevatorCommunicationHandler {
         try {
             String backendAddress = InetAddress.getLocalHost().getHostAddress() + ":" + server.getWebServer().getPort();
             payLoad.put("ID", elevatorApplicationModel.getId().toString());
-            payLoad.put("Address", "localhost");
+            payLoad.put("Address", "localhost:8443");
             payLoad.put("MaxUtil", env.getProperty("com.itsupport.MaxUtil"));
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(payLoad, null);
             return this.restTemplate.exchange(url.toString(), HttpMethod.POST, entity, Elevator.class).getBody();

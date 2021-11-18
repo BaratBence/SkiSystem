@@ -1,5 +1,7 @@
 package com.itsupport.skibackend.models;
 
+import org.hibernate.annotations.Type;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -16,6 +18,7 @@ import javax.validation.constraints.Size;
 public class User {
     @Id
     @GeneratedValue
+    @Type(type="uuid-char")
     private UUID id;
 
     @NotBlank
