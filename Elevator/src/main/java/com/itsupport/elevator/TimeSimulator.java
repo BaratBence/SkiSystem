@@ -1,14 +1,18 @@
 package com.itsupport.elevator;
 
-import com.itsupport.elevator.elevator.ElevatorHandler;
+import com.itsupport.elevator.services.ElevatorHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TimeSimulator {
+    @Autowired
+    private ElevatorHandler elevatorHandler;
+
     //To simulate the different utilization of the Elevator
-    @Scheduled(fixedDelay = 2000)
+    @Scheduled(fixedDelay = 1000)
     private void simulateTime(){
-        ElevatorHandler.getInstance().simulateUtilization();
+        this.elevatorHandler.simulateUtilization();
     }
 }

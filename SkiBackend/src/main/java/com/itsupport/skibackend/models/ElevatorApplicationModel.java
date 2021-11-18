@@ -1,5 +1,6 @@
 package com.itsupport.skibackend.models;
 
+import com.itsupport.elevator.models.Elevator;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.Entity;
@@ -8,7 +9,7 @@ import javax.persistence.Id;;
 import java.util.UUID;
 
 @Entity
-public class ElevatorApplication {
+public class ElevatorApplicationModel {
 
     @Id
     @GeneratedValue
@@ -67,8 +68,14 @@ public class ElevatorApplication {
         this.address = address;
     }
 
-    public void update(@NotNull ElevatorApplication elevatorApplication){
-        this.seatsNum = elevatorApplication.getSeatsNum();
-        this.name = elevatorApplication.getName();
+    public void update(@NotNull ElevatorApplicationModel elevatorApplicationModel){
+        this.seatsNum = elevatorApplicationModel.getSeatsNum();
+        this.name = elevatorApplicationModel.getName();
+    }
+
+    public ElevatorApplicationModel refreshElevatorStats(@NotNull Elevator elevator){
+        this.utilization = elevator.getUtilization();
+        this.isOnline = elevator.isOnline();
+        return this;
     }
 }

@@ -1,4 +1,4 @@
-package com.itsupport.skibackend.communication.payload;
+package com.itsupport.skibackend.models.payload;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,8 +1,8 @@
 package com.itsupport.skibackend.frontendapi;
 
-import com.itsupport.skibackend.communication.payload.JwtResponse;
-import com.itsupport.skibackend.communication.payload.LoginRequest;
-import com.itsupport.skibackend.communication.payload.SignUpRequest;
+import com.itsupport.skibackend.models.payload.JwtResponse;
+import com.itsupport.skibackend.models.payload.LoginRequest;
+import com.itsupport.skibackend.models.payload.SignUpRequest;
 import com.itsupport.skibackend.models.EUserRole;
 import com.itsupport.skibackend.models.User;
 import com.itsupport.skibackend.models.UserRole;
@@ -11,8 +11,6 @@ import com.itsupport.skibackend.models.persistence.UserRoleRepository;
 import com.itsupport.skibackend.security.jwt.JwtUtils;
 import com.itsupport.skibackend.security.services.UserDetailsImpl;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
