@@ -16,15 +16,6 @@ public class BackendCommunicationHandler {
     @Autowired
     private  RestTemplate restTemplate;
 
-    /*
-    @Autowired
-    private ElevatorHandler elevatorHandler;
-
-    BackendCommunicationHandler(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-     */
-
     public void notifyBackend(String backendAddress, Elevator elevator) {
         UriComponents url = UriComponentsBuilder.newInstance()
                 .scheme("https")
@@ -33,11 +24,8 @@ public class BackendCommunicationHandler {
                 .build();
         try {
             HttpHeaders headers = new HttpHeaders();
-            //headers.setContentType(MediaType.APPLICATION_JSON);
-            //headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             HttpEntity<Elevator> entity = new HttpEntity<>(elevator, headers);
             this.restTemplate.put(url.toString(), entity, ElevatorHandler.ID);
-            System.out.println("CallBack sent!!");
         }catch (HttpStatusCodeException ex){
             // raw http status code e.g `404`
             System.out.println(ex.getRawStatusCode());

@@ -28,7 +28,6 @@ public class ElevatorCallbackController {
                                                @RequestBody Elevator faultyElevator){
         Optional<ElevatorApplicationModel> faultyElevatorApplication = elevatorAppRepository.findById(faultyElevatorAppID);
         if (faultyElevatorApplication.isPresent()){
-            System.out.println("CallBack received!!");
             return elevatorCallbackHandler.handleExceptionalEvent(faultyElevatorAppID, faultyElevator);
         } else
         {

@@ -23,9 +23,6 @@ public class ElevatorAPIController {
 
     @PostMapping("/register")
     ResponseEntity<Elevator> registerElevator(@RequestBody Map<String, String>payload){
-        System.out.println(payload.get("ID"));
-        System.out.println(payload.get("Address"));
-        System.out.println(payload.get("MaxUtil"));
         if (elevatorHandler.getElevatorStatus().isPresent()){
             return ResponseEntity.badRequest().build();
         }

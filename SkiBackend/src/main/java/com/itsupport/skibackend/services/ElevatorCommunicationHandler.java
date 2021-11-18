@@ -4,7 +4,8 @@ import com.itsupport.elevator.models.Elevator;
 
 import com.itsupport.skibackend.models.ElevatorApplicationModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,33 +15,32 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.Duration;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
 
 @Service
 public class ElevatorCommunicationHandler {
+    @Autowired
+    private ServletWebServerApplicationContext server;
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private RestTemplate restTemplate;
-    /*
-    public ElevatorCommunicationHandler(RestTemplateBuilder restTemplateBuilder){
-        this.restTemplate = restTemplateBuilder
-                .setConnectTimeout(Duration.ofSeconds(10))
-                .setReadTimeout(Duration.ofSeconds(10))
-                .build();
-    }
-     */
 
     public Elevator registerNewElevator(ElevatorApplicationModel elevatorApplicationModel){
         UriComponents url = UriComponentsBuilder.newInstance().scheme("https").host(elevatorApplicationModel.getAddress()).path("api/register").build();
         Map<String, String> payLoad = new HashMap<>();
-        payLoad.put("ID", elevatorApplicationModel.getId().toString());
-        payLoad.put("Address", "localhost:8443");
-        payLoad.put("MaxUtil", "0.9");
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(payLoad, null);
         try {
+            String backendAddress = InetAddress.getLocalHost().getHostAddress() + ":" + server.getWebServer().getPort();
+            payLoad.put("ID", elevatorApplicationModel.getId().toString());
+            payLoad.put("Address", backendAddress);
+            payLoad.put("MaxUtil", env.getProperty("com.itsupport.MaxUtil"));
+            HttpEntity<Map<String, String>> entity = new HttpEntity<>(payLoad, null);
             return this.restTemplate.exchange(url.toString(), HttpMethod.POST, entity, Elevator.class).getBody();
         }catch (HttpStatusCodeException ex){
             // raw http status code e.g `404`
@@ -51,9 +51,10 @@ public class ElevatorCommunicationHandler {
             System.out.println(ex.getResponseBodyAsString());
             // get http headers
             HttpHeaders headers= ex.getResponseHeaders();
-
-            return null;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     public Elevator getElevatorStatus(String address){
