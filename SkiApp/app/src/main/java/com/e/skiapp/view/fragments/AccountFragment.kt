@@ -13,8 +13,10 @@ import com.e.skiapp.databinding.FragmentAccountBinding
 import com.e.skiapp.model.User
 import com.e.skiapp.model.UserData
 import com.e.skiapp.network.RetrofitClient
+import com.e.skiapp.network.requests.LoginRequest
 import com.e.skiapp.network.response.JwtResponse
 import com.e.skiapp.network.services.UserService
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,10 +39,9 @@ class AccountFragment : Fragment() {
         binding.saveButton.setOnClickListener{
             val userName = binding.editTextUserNameEdit.text.toString()
             val password= binding.editTextPasswordEdit.text.toString()
-            if(checkInput(userName,password)) return@setOnClickListener
-
+            if(!checkInput(userName,password)) return@setOnClickListener
+            update(userName, password)
         }
-
         return binding.root
     }
 
@@ -60,12 +61,14 @@ class AccountFragment : Fragment() {
     }
 
     fun update(userName: String, password: String) {
-        retrofit = RetrofitClient.getInstance(binding.root.context);
-        val call = retrofit!!.create(UserService::class.java).update(User(userName, password), "Bearer " + UserData.getToken())
+        retrofit = RetrofitClient.getInstance(binding.root.context)
+        val call = retrofit!!.create(UserService::class.java).update(user = User(userName, password), "Bearer " + UserData.getToken() )
+       // System.out.println(call.body.getUser().)
         call.enqueue(object : Callback<JwtResponse> {
             override fun onResponse(call: Call<JwtResponse>, message: Response<JwtResponse>) {
                 if (message.code() == 200) {
-                    UserData.initialize(message.body()!!.getToken()!!, User(message.body()!!.getUsername()!!))
+                    if(message.body()!!.getAccessToken()!! == "") UserData.initialize(UserData.getToken()!!, User(message.body()!!.getUsername()!!))
+                    else UserData.initialize(message.body()!!.getAccessToken()!!, User(message.body()!!.getUsername()!!))
                     Toast.makeText(binding.root.context, "Successful update", Toast.LENGTH_SHORT).show()
                 }
             }

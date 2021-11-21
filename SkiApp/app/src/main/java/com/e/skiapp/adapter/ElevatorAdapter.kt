@@ -3,7 +3,10 @@ package com.e.skiapp.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.e.skiapp.R
 import com.e.skiapp.databinding.ElevatorRowBinding
 import com.e.skiapp.databinding.FragmentElevatorBinding
 import com.e.skiapp.model.ElevatorApplication
@@ -15,7 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class ElevatorAdapter(private val elevatorApplications: ArrayList<ElevatorApplication>, private val fragmentElevatorBinding: FragmentElevatorBinding):RecyclerView.Adapter<ElevatorAdapter.ViewHolder>() {
+class ElevatorAdapter(private var elevatorApplications: ArrayList<ElevatorApplication>, private val fragmentElevatorBinding: FragmentElevatorBinding):RecyclerView.Adapter<ElevatorAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: ElevatorRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(elevatorApplication: ElevatorApplication) {
             binding.elevator = elevatorApplication
@@ -42,6 +45,21 @@ class ElevatorAdapter(private val elevatorApplications: ArrayList<ElevatorApplic
 
     fun getData(): ArrayList<ElevatorApplication> {
         return elevatorApplications
+    }
+
+    fun updateData(updatedData: ArrayList<ElevatorApplication>) {
+        elevatorApplications = ArrayList()
+        for(elevator in updatedData) {
+            elevator.setUtilization(Math.round(elevator.getUtilization()*100).toFloat())
+            if(elevator.getUtilization()>=90.0) {
+                var builder = NotificationCompat.Builder(fragmentElevatorBinding.root.context, "notification").setContentTitle("Elevator is at dangerous usage").setSmallIcon(R.drawable.ic_baseline_elevator_24)
+                    .setContentText("One of the elevators is in dangerous usage state").setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                var notificationManager = NotificationManagerCompat.from(fragmentElevatorBinding.root.context)
+                notificationManager.notify(1, builder.build());
+            }
+            elevatorApplications.add(elevator)
+        }
+
     }
 
     fun turnOn(binding: ElevatorRowBinding, position: Int) {

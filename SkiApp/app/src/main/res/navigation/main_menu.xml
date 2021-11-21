@@ -20,6 +20,11 @@
         android:name="com.e.skiapp.view.fragments.ElevatorFragment"
         android:label="fragment_elevator"
         tools:layout="@layout/fragment_elevator" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.e.skiapp.view.fragments.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
 
 
 </navigation>

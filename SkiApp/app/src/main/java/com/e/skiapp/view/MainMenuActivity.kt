@@ -44,6 +44,7 @@ class MainMenuActivity : AppCompatActivity() {
                 R.id.HomeFragment -> "Home"
                 R.id.AccountFragment -> "Manage account"
                 R.id.elevatorFragment -> "Manage elevators"
+                R.id.mapFragment -> "Map"
                 else -> "SkiApp"
             }
         }

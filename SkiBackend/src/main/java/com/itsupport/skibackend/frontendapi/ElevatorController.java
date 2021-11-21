@@ -2,12 +2,16 @@ package com.itsupport.skibackend.frontendapi;
 
 import com.itsupport.elevator.models.Elevator;
 import com.itsupport.skibackend.models.ElevatorApplicationModel;
+import com.itsupport.skibackend.models.Log;
 import com.itsupport.skibackend.models.persistence.*;
 
+import com.itsupport.skibackend.security.services.UserDetailsImpl;
 import com.itsupport.skibackend.services.ElevatorCommunicationHandler;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -18,6 +22,9 @@ import java.util.*;
 public class ElevatorController {
 
     private final ElevatorAppRepository elevatorAppRepository;
+    @Autowired
+    private LogRepository logRepository;
+
     private final ElevatorCommunicationHandler elevatorConnectionHandler;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -63,6 +70,7 @@ public class ElevatorController {
         newElevatorApplication.setOnline(false);
         newElevatorApplication.setUtilization(0.0f);
         Elevator newElevator = elevatorConnectionHandler.registerNewElevator(newElevatorApplication);
+        logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Post", "/api/elevators/add","Success", java.time.LocalDateTime.now().toString()));
         return ResponseEntity.created(URI.create("")).build();
     }
 
@@ -72,9 +80,11 @@ public class ElevatorController {
         Optional<ElevatorApplicationModel> foundElevatorApplication = elevatorAppRepository.findById(id);
         if(foundElevatorApplication.isPresent()){
             foundElevatorApplication.get().update(newElevatorApplicationModel);
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/elevators/{"+id+"}/update","Success", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.ok(elevatorAppRepository.save(foundElevatorApplication.get()));
         }
         else {
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/elevators/{"+id+"}/update","Failed(no such elevator id)", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.notFound().build();
         }
     }
@@ -86,9 +96,11 @@ public class ElevatorController {
             Elevator tmpElevator = elevatorConnectionHandler.turnOffElevator(foundElevatorApplication.get().getAddress());
             foundElevatorApplication.get().setOnline(tmpElevator.isOnline());
             foundElevatorApplication.get().setUtilization(tmpElevator.getUtilization());
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/elevators/{"+id+"}/turnOff","Success", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.ok(elevatorAppRepository.save(foundElevatorApplication.get()));
         }
         else {
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/elevators/{"+id+"}/turnOff","Failed(no such elevator id)", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.notFound().build();
         }
     }
@@ -100,11 +112,19 @@ public class ElevatorController {
             Elevator tmpElevator = elevatorConnectionHandler.turnOnElevator(foundElevatorApplication.get().getAddress());
             foundElevatorApplication.get().setOnline(tmpElevator.isOnline());
             foundElevatorApplication.get().setUtilization(tmpElevator.getUtilization());
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/elevators/{"+id+"}/turnOn","Success", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.ok(elevatorAppRepository.save(foundElevatorApplication.get()));
         }
         else {
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/elevators/{"+id+"}/turnOn","Failed(no such elevator id)", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    void deleteElevator(@PathVariable UUID id) {
+        elevatorAppRepository.deleteById(id);
     }
 
 }

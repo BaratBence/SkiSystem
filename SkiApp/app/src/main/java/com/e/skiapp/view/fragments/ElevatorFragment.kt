@@ -1,6 +1,10 @@
 package com.e.skiapp.view.fragments
 
-import android.content.Intent
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.NotificationManager.IMPORTANCE_DEFAULT
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.e.skiapp.R
@@ -16,7 +22,6 @@ import com.e.skiapp.adapter.ElevatorAdapter
 import com.e.skiapp.databinding.FragmentElevatorBinding
 import com.e.skiapp.model.ElevatorApplication
 
-import com.e.skiapp.model.UserData
 import com.e.skiapp.network.RetrofitClient
 
 import com.e.skiapp.network.services.ElevatorService
@@ -36,10 +41,16 @@ class ElevatorFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_elevator, container, false)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel("notification", "notification",IMPORTANCE_DEFAULT)
+            val notificationManager: NotificationManager = getSystemService(binding.root.context, NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
 
-        val adapter = ElevatorAdapter(UserData.getElevatorApplications(), binding)
+        val adapter = ElevatorAdapter(ArrayList<ElevatorApplication>(), binding)
         getAll(adapter)
         binding.rvelevators.adapter = adapter
         binding.rvelevators.layoutManager = LinearLayoutManager(binding.root.context)
@@ -52,19 +63,25 @@ class ElevatorFragment : Fragment() {
                 activity?.runOnUiThread(java.lang.Runnable {
                     adapter.notifyDataSetChanged()
                 })
-                mainHandler.postDelayed(this, 5000)
+                mainHandler.postDelayed(this, 10000)
             }
         })
+
+        binding.swipeToRefreshLayout.setOnRefreshListener {
+            getAll(adapter)
+            binding.swipeToRefreshLayout.isRefreshing = false
+        }
+
         return binding.root
     }
 
     fun getAll(adapter: ElevatorAdapter) {
         retrofit = RetrofitClient.getInstance(binding.root.context)
-        val call = retrofit!!.create(ElevatorService::class.java).getAll("Bearer " + UserData.getToken())
+        val call = retrofit!!.create(ElevatorService::class.java).getAll()
         call.enqueue(object : Callback<List<ElevatorApplication>> {
             override fun onResponse(call: Call<List<ElevatorApplication>>, message: Response<List<ElevatorApplication>>) {
                 if (message.code() == 200) {
-                    UserData.updateElevators(message as ArrayList<ElevatorApplication>)
+                    adapter.updateData(message.body()!! as ArrayList<ElevatorApplication>)
                     adapter.notifyDataSetChanged()
                 }
             }

@@ -8,8 +8,6 @@ class UserData {
 
         private var user: User? = null
 
-        private var elevatorApplications: ArrayList<ElevatorApplication> = ArrayList()
-
         fun getToken(): String? {
             return token
         }
@@ -21,14 +19,6 @@ class UserData {
 
         fun createUser(): User? {
             return user
-        }
-
-        fun getElevatorApplications(): ArrayList<ElevatorApplication> {
-            return elevatorApplications
-        }
-
-        fun updateElevators(elevators: ArrayList<ElevatorApplication>) {
-            this.elevatorApplications = elevators
         }
 
     }

@@ -1,11 +1,13 @@
 package com.itsupport.skibackend.frontendapi;
 
+import com.itsupport.skibackend.models.Log;
 import com.itsupport.skibackend.models.payload.JwtResponse;
 import com.itsupport.skibackend.models.payload.LoginRequest;
 import com.itsupport.skibackend.models.payload.SignUpRequest;
 import com.itsupport.skibackend.models.EUserRole;
 import com.itsupport.skibackend.models.User;
 import com.itsupport.skibackend.models.UserRole;
+import com.itsupport.skibackend.models.persistence.LogRepository;
 import com.itsupport.skibackend.models.persistence.UserRepository;
 import com.itsupport.skibackend.models.persistence.UserRoleRepository;
 import com.itsupport.skibackend.security.jwt.JwtUtils;
@@ -40,6 +42,9 @@ public class AuthController {
     UserRoleRepository roleRepository;
 
     @Autowired
+    LogRepository logRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -59,6 +64,8 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        logRepository.save(new Log(userDetails.getUsername(),"Post", "/api/users/login","Success", java.time.LocalDateTime.now().toString()));
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
@@ -76,16 +83,23 @@ public class AuthController {
             {
                 user.get().setUsername(userNew.getUsername());
                 user.get().setPassword(encoder.encode(userNew.getPassword()));
+                logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/users/{"+ id +"}/update","Success", java.time.LocalDateTime.now().toString()));
                 return ResponseEntity.ok(userRepository.save(user.get()));
             }
-            else return ResponseEntity.badRequest().build();
+            else  {
+                logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/users/{"+ id +"}/update","Failed(no such user or username not unique)", java.time.LocalDateTime.now().toString()));
+                return ResponseEntity.badRequest().build();
+            }
         }
-        else return  ResponseEntity.badRequest().build();
+        else {
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/users/{"+ id +"}/update","Failed(no such user with the given id)", java.time.LocalDateTime.now().toString()));
+            return  ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping
     @RequestMapping(value = "/update")
-    @PreAuthorize("hasRole('ADMINISTRATOR') || hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR') || hasRole('ROLE_USER')")
     public ResponseEntity<JwtResponse> updateUser(@Valid @RequestBody @NotNull User userNew) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> existingUser = userRepository.findByUsername(userNew.getUsername());
@@ -96,6 +110,7 @@ public class AuthController {
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/users/update","Success", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.ok(new JwtResponse("", user.get().getId(), user.get().getUsername(), roles));
         }
         else if(existingUser.isEmpty()) {
@@ -109,9 +124,13 @@ public class AuthController {
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Put", "/api/users/update","Success", java.time.LocalDateTime.now().toString()));
             return ResponseEntity.ok(new JwtResponse(jwt, user.get().getId(), user.get().getUsername(), roles));
         }
-        else return ResponseEntity.badRequest().build();
+        else {
+            logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Post", "/api/users/update","Failed(bad parameters were given)", java.time.LocalDateTime.now().toString()));
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping
@@ -145,7 +164,7 @@ public class AuthController {
             });
         }
         user.setRoles(roles);
+        logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Post", "/api/users/addUser","Success", java.time.LocalDateTime.now().toString()));
         return ResponseEntity.ok(userRepository.save(user));
-
     }
 }

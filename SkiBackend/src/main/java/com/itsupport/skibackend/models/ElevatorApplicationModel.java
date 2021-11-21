@@ -22,6 +22,11 @@ public class ElevatorApplicationModel {
     private float utilization;
     private String address;
 
+    private float startX;
+    private float startY;
+    private float endX;
+    private float endY;
+
     public UUID getId() {
         return Id;
     }
@@ -79,5 +84,37 @@ public class ElevatorApplicationModel {
         this.utilization = elevator.getUtilization();
         this.isOnline = elevator.isOnline();
         return this;
+    }
+
+    public void setStartX(float startX) {
+        this.startX = startX;
+    }
+
+    public float getStartX() {
+        return startX;
+    }
+
+    public void setStartY(float startY) {
+        this.startY = startY;
+    }
+
+    public float getStartY() {
+        return startY;
+    }
+
+    public void setEndX(float endX) {
+        this.endX = endX;
+    }
+
+    public float getEndX() {
+        return endX;
+    }
+
+    public void setEndY(float endY) {
+        this.endY = endY;
+    }
+
+    public float getEndY() {
+        return endY;
     }
 }

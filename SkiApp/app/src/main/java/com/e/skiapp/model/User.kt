@@ -2,12 +2,12 @@ package com.e.skiapp.model
 
 class User {
 
-    private var username:String ?= null
+    private lateinit var username:String
 
-    private var password: String? =null
+    private lateinit var password: String
 
     fun getUsername(): String {
-        return username!!
+        return username
     }
 
     fun setUsername(username: String) {
@@ -16,6 +16,10 @@ class User {
 
     fun setPassword(password: String) {
         this.password = password
+    }
+
+    fun getPassword(): String {
+        return password
     }
 
     constructor(username: String) {

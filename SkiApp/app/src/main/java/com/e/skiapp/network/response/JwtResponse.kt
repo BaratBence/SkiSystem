@@ -4,24 +4,24 @@ import java.util.*
 
 class JwtResponse {
 
-    private var token: String? = null
+    private var accessToken: String? = null
 
     private var id: UUID? = null
 
     private var username: String? = null
 
-    fun JwtResponse(id: UUID, username: String, token: String) {
+    constructor(id: UUID, username: String, token: String) {
         this.id = id
-        this.token = token
+        this.accessToken = token
         this.username
     }
 
-    fun getToken(): String? {
-        return token
+    fun getAccessToken(): String? {
+        return accessToken
     }
 
-    fun setToken(accessToken: String) {
-        token = accessToken
+    fun setAccessToken(accessToken: String) {
+        this.accessToken = accessToken
     }
 
     fun getId(): UUID? {

@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".view.fragments.ElevatorFragment">
 
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,7 +19,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp" />
 
-    </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>
 </layout>

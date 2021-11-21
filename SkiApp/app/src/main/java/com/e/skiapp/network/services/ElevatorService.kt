@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface ElevatorService {
     @GET("api/elevators")
-    fun getAll(@Header("Authorization") authHeader: String): Call<List<ElevatorApplication>>
+    fun getAll(): Call<List<ElevatorApplication>>
 
     @PUT("api/elevators/{id}/turnOff")
     fun turnOff(@Path("id") id:String,@Header("Authorization") authHeader: String): Call<ElevatorApplication>

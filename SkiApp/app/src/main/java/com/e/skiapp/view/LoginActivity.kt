@@ -29,7 +29,10 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.loginbutton.setOnClickListener {
-           login()
+            var name = binding.editTextPersonName.text.toString()
+            var pw = binding.editTextPassword.text.toString()
+            if(!checkInput(pw,name)) return@setOnClickListener
+           else login(name, pw)
         }
 
     }
@@ -54,13 +57,13 @@ class LoginActivity : AppCompatActivity() {
         else return true
     }
 
-    fun login() {
-        retrofit = RetrofitClient.getInstance(binding.root.context);
-        val call = retrofit!!.create(UserService::class.java).login(loginRequest = LoginRequest(binding.editTextPersonName.text.toString(), binding.editTextPersonName.text.toString()))
+    fun login(username: String, password: String) {
+        retrofit = RetrofitClient.getInstance(binding.root.context)
+        val call = retrofit!!.create(UserService::class.java).login(loginRequest = LoginRequest(username, password))
         call.enqueue(object : Callback<JwtResponse> {
             override fun onResponse(call: Call<JwtResponse>, message: Response<JwtResponse>) {
                 if (message.code() == 200) {
-                    UserData.initialize(message.body()!!.getToken()!!, User(message.body()!!.getUsername()!!))
+                    UserData.initialize(message.body()!!.getAccessToken()!!, User(message.body()!!.getUsername()!!))
                     val intent = Intent(binding.root.context, MainMenuActivity::class.java)
                     binding.root.context.startActivity(intent)
                 }

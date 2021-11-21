@@ -30,13 +30,15 @@ public class RunAfterStart {
 
     @EventListener(ApplicationReadyEvent.class)
     public void createDefaultUser() {
-        roleRepository.save(new UserRole(ROLE_ADMINISTRATOR));
-        roleRepository.save(new UserRole(ROLE_USER));
-        Set<UserRole> roles = new HashSet<>();
-        roles.add(roleRepository.findByName(ROLE_ADMINISTRATOR).get());
+        if(roleRepository.findByName(ROLE_ADMINISTRATOR).isEmpty())  roleRepository.save(new UserRole(ROLE_ADMINISTRATOR));
+        if(roleRepository.findByName(ROLE_USER).isEmpty()) roleRepository.save(new UserRole(ROLE_USER));
+        if(!userRepository.existsByUsername("admin")) {
+            Set<UserRole> roles = new HashSet<>();
+            roles.add(roleRepository.findByName(ROLE_ADMINISTRATOR).get());
 
-        User user = new User("admin", encoder.encode("admin"));
-        user.setRoles(roles);
-        userRepository.save(user);
+            User user = new User("admin", encoder.encode("admin"));
+            user.setRoles(roles);
+            userRepository.save(user);
+        }
     }
 }
