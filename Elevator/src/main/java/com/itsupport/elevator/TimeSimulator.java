@@ -11,7 +11,7 @@ public class TimeSimulator {
     private ElevatorHandler elevatorHandler;
 
     //To simulate the different utilization of the Elevator
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10000)
     private void simulateTime(){
         this.elevatorHandler.simulateUtilization();
     }

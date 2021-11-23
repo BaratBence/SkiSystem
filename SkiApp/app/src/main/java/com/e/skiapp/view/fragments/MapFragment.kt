@@ -46,15 +46,13 @@ class MapFragment : Fragment() {
         mainHandler.post(object : Runnable {
             override fun run() {
                 getAll()
-                binding.imageV.background = BitmapDrawable(getResources(), bitmap)
                 activity?.runOnUiThread(java.lang.Runnable {
-
+                    binding.imageV.background = BitmapDrawable(getResources(), bitmap)
                 })
                 mainHandler.postDelayed(this, 10000)
             }
         })
 
-        binding.imageV.background = BitmapDrawable(getResources(), bitmap)
         return binding.root
     }
 

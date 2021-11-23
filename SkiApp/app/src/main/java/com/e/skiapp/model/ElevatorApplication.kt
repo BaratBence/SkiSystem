@@ -5,7 +5,7 @@ class ElevatorApplication {
 
     private var name: String ?=null
 
-    private var isOnline = false
+    private var online = false
 
     private var id: String ?= null
 
@@ -19,13 +19,13 @@ class ElevatorApplication {
     constructor(id: String, name: String, isOnline: Boolean, utilization: Float) {
         this.id = id
         this.name = name
-        this.isOnline = isOnline
+        this.online = isOnline
         this.utilization  =utilization
     }
 
     constructor(id: String, name: String, isOnline: Boolean , utilization: Float, startX: Float, startY: Float, endX: Float, endY: Float) {
         this.name = name
-        this.isOnline = isOnline
+        this.online = isOnline
         this.id = id
         this.utilization = utilization
         this.startX = startX
@@ -47,11 +47,11 @@ class ElevatorApplication {
     }
 
     fun setIsOnline(isOnline: Boolean) {
-        this.isOnline = isOnline
+        this.online = isOnline
     }
 
     fun getIsOnline(): Boolean {
-        return isOnline
+        return online
     }
 
     fun getUtilization(): Float {

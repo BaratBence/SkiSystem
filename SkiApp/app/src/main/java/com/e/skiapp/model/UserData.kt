@@ -8,6 +8,8 @@ class UserData {
 
         private var user: User? = null
 
+        private var danger = false
+
         fun getToken(): String? {
             return token
         }
@@ -19,6 +21,14 @@ class UserData {
 
         fun createUser(): User? {
             return user
+        }
+
+        fun setDanger(danger: Boolean) {
+            this.danger = danger
+        }
+
+        fun getDanger(): Boolean {
+            return danger
         }
 
     }

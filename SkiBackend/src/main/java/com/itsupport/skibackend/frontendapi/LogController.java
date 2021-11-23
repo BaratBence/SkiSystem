@@ -37,7 +37,7 @@ public class LogController {
 
     @GetMapping("/user/{user}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<List<Log>> getLogById(@PathVariable String username) {
+    public ResponseEntity<List<Log>> getLogByUser(@PathVariable String username) {
         List<Log> log = logRepository.findByUsername(username);
         if(log.isEmpty()) {
             logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Get", "/api/user/log/{" + username +"}","Failed no such username or user action", java.time.LocalDateTime.now().toString()));

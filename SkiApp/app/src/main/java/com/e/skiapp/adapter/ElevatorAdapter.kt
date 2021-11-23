@@ -10,6 +10,7 @@ import com.e.skiapp.R
 import com.e.skiapp.databinding.ElevatorRowBinding
 import com.e.skiapp.databinding.FragmentElevatorBinding
 import com.e.skiapp.model.ElevatorApplication
+import com.e.skiapp.model.User
 import com.e.skiapp.model.UserData
 import com.e.skiapp.network.RetrofitClient
 import com.e.skiapp.network.services.ElevatorService
@@ -34,9 +35,10 @@ class ElevatorAdapter(private var elevatorApplications: ArrayList<ElevatorApplic
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(elevatorApplications[position])
         viewHolder.binding.textViewUsage.text = elevatorApplications[position].getUtilization().toString()
+        viewHolder.binding.isOnlineCheckBox.isChecked = elevatorApplications[position].getIsOnline()
         viewHolder.binding.isOnlineCheckBox.setOnClickListener {
-            if(viewHolder.binding.isOnlineCheckBox.isChecked) turnOn(viewHolder.binding, position)
-            else turnOff(viewHolder.binding,position)
+            if (viewHolder.binding.isOnlineCheckBox.isChecked) turnOn(viewHolder.binding, position)
+            else turnOff(viewHolder.binding, position)
         }
 
     }
@@ -49,16 +51,20 @@ class ElevatorAdapter(private var elevatorApplications: ArrayList<ElevatorApplic
 
     fun updateData(updatedData: ArrayList<ElevatorApplication>) {
         elevatorApplications = ArrayList()
+        var noDanger= false
         for(elevator in updatedData) {
             elevator.setUtilization(Math.round(elevator.getUtilization()*100).toFloat())
-            if(elevator.getUtilization()>=90.0) {
+            if(elevator.getUtilization()>=90.0 && !UserData.getDanger()) {
                 var builder = NotificationCompat.Builder(fragmentElevatorBinding.root.context, "notification").setContentTitle("Elevator is at dangerous usage").setSmallIcon(R.drawable.ic_baseline_elevator_24)
                     .setContentText("One of the elevators is in dangerous usage state").setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 var notificationManager = NotificationManagerCompat.from(fragmentElevatorBinding.root.context)
                 notificationManager.notify(1, builder.build());
+                UserData.setDanger(true)
+                noDanger = true
             }
             elevatorApplications.add(elevator)
         }
+        if(!noDanger) UserData.setDanger(false)
 
     }
 

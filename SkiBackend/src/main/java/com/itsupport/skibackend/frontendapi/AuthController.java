@@ -167,4 +167,11 @@ public class AuthController {
         logRepository.save(new Log(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(),"Post", "/api/users/addUser","Success", java.time.LocalDateTime.now().toString()));
         return ResponseEntity.ok(userRepository.save(user));
     }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<List<User>> getAll() {
+        return ResponseEntity.ok(userRepository.findAll());
+    }
+
 }

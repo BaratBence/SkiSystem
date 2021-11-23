@@ -24,7 +24,6 @@ class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main_menu)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_menu) as ActivityMainMenuBinding
 
         val drawerLayout = binding.mainMenuDrawerLayout
