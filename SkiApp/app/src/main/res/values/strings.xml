@@ -15,4 +15,7 @@
     <string name="new_password">New Password</string>
     <string name="save">save</string>
     <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="on_off">On/Off</string>
+    <string name="utilization">Utilization(%)</string>
 </resources>
