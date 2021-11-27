@@ -9,6 +9,5 @@ import java.util.UUID;
 @Service
 public class ClientCommunicationHandler {
     public void pushMessage(UUID faultyElevatorAppID, Elevator faultyElevator) {
-        //throw new NotYetImplementedException();
     }
 }

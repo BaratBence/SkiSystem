@@ -30,11 +30,9 @@ public class BackendCommunicationHandler {
             // raw http status code e.g `404`
             System.out.println(ex.getRawStatusCode());
             // http status code e.g. `404 NOT_FOUND`
-            System.out.println(ex.getStatusCode().toString());
+            System.out.println(ex.getStatusCode());
             // get response body
             System.out.println(ex.getResponseBodyAsString());
-            // get http headers
-            HttpHeaders headers= ex.getResponseHeaders();
         }
     }
 }

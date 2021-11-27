@@ -1,9 +1,7 @@
 package com.itsupport.skibackend.config;
 
 import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,13 +30,6 @@ public class RestTemplateConfig{
 
     @Bean
     public RestTemplate restTemplateWithTrustStore(RestTemplateBuilder builder) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        //To trust self-signed cert
-        //TrustStrategy acceptingTrustStrategy = (x509Certificates, s) -> true;
-        /*SSLContext sslContext = new SSLContextBuilder()
-                .loadTrustMaterial(null, acceptingTrustStrategy)
-                .build();
-        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());*/
-
         SSLContext sslContext = new SSLContextBuilder()
                 .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
                 .build();
