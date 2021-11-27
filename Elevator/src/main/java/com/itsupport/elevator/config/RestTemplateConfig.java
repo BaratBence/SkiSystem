@@ -36,17 +36,17 @@ public class RestTemplateConfig{
     @Bean
     public RestTemplate restTemplateWithTrustStore(RestTemplateBuilder builder) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         //To trust self-signed cert
-        TrustStrategy acceptingTrustStrategy = (x509Certificates, s) -> true;
-        SSLContext sslContext = new SSLContextBuilder()
+        //TrustStrategy acceptingTrustStrategy = (x509Certificates, s) -> true;
+        /*SSLContext sslContext = new SSLContextBuilder()
                 .loadTrustMaterial(null, acceptingTrustStrategy)
                 .build();
-        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
-        /*
+        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());*/
+
         SSLContext sslContext = new SSLContextBuilder()
                 .loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
                 .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
-         */
+
         HttpClient httpClient = HttpClients.custom()
                 .setSSLSocketFactory(socketFactory)
                 .build();
