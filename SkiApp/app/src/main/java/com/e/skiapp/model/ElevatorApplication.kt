@@ -90,7 +90,6 @@ class ElevatorApplication {
         return endY.toFloat()
     }
 
-    //TODO: REMOVE
     fun setUtilization(utilization: Float) {
         this.utilization = utilization
     }

@@ -10,7 +10,6 @@ import com.e.skiapp.R
 import com.e.skiapp.databinding.ElevatorRowBinding
 import com.e.skiapp.databinding.FragmentElevatorBinding
 import com.e.skiapp.model.ElevatorApplication
-import com.e.skiapp.model.User
 import com.e.skiapp.model.UserData
 import com.e.skiapp.network.RetrofitClient
 import com.e.skiapp.network.services.ElevatorService

@@ -2,19 +2,14 @@ package com.e.skiapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.service.autofill.UserData
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.e.skiapp.R
-import com.e.skiapp.databinding.ActivityLoginBinding
 import com.e.skiapp.databinding.ActivityMainMenuBinding
-import com.e.skiapp.databinding.MainMenuHeaderBinding
-import com.google.android.material.navigation.NavigationView
 
 class MainMenuActivity : AppCompatActivity() {
 

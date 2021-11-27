@@ -14,7 +14,6 @@ import javax.net.ssl.*
 class RetrofitClient {
 
     companion object {
-        //TODO: SHOULD BE CHANGED
         private val BASE_URL = "https://10.0.2.2:8443/"
 
         private var retrofit: Retrofit? = null
@@ -28,17 +27,14 @@ class RetrofitClient {
 
         private fun getUnsafeOkHttpClient(): OkHttpClient? {
             return try {
-                // Create a trust manager that does not validate certificate chains
                 val trustAllCerts = arrayOf<TrustManager>(
                         object : X509TrustManager {
-                            //@Throws(CertificateException::class)
                             override fun checkClientTrusted(
                                     chain: Array<X509Certificate?>?,
                                     authType: String?
                             ) {
                             }
 
-                           // @Throws(CertificateException::class)
                             override fun checkServerTrusted(
                                     chain: Array<X509Certificate?>?,
                                     authType: String?
@@ -51,10 +47,8 @@ class RetrofitClient {
                         }
                 )
 
-                // Install the all-trusting trust manager
                 val sslContext = SSLContext.getInstance("SSL")
                 sslContext.init(null, trustAllCerts, SecureRandom())
-                // Create an ssl socket factory with our all-trusting manager
                 val sslSocketFactory = sslContext.socketFactory
                 val trustManagerFactory: TrustManagerFactory =
                         TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())

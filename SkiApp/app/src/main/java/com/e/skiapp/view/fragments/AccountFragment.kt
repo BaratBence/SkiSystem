@@ -1,6 +1,5 @@
 package com.e.skiapp.view.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,10 +12,8 @@ import com.e.skiapp.databinding.FragmentAccountBinding
 import com.e.skiapp.model.User
 import com.e.skiapp.model.UserData
 import com.e.skiapp.network.RetrofitClient
-import com.e.skiapp.network.requests.LoginRequest
 import com.e.skiapp.network.response.JwtResponse
 import com.e.skiapp.network.services.UserService
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,7 +60,6 @@ class AccountFragment : Fragment() {
     fun update(userName: String, password: String) {
         retrofit = RetrofitClient.getInstance(binding.root.context)
         val call = retrofit!!.create(UserService::class.java).update(user = User(userName, password), "Bearer " + UserData.getToken() )
-       // System.out.println(call.body.getUser().)
         call.enqueue(object : Callback<JwtResponse> {
             override fun onResponse(call: Call<JwtResponse>, message: Response<JwtResponse>) {
                 if (message.code() == 200) {

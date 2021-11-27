@@ -1,7 +1,5 @@
 package com.e.skiapp.model
 
-import java.util.*
-
 class UserData {
     companion object {
         private var token: String? = null
